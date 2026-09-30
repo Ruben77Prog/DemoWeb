@@ -8,5 +8,5 @@
 <title>Bluewave - Vive!</title>
 </head>
 <body>
-<%@ include file="/html\Incidencia\incidenica-search.jsp"%>
+<%@ include file="/html\incidencia\incidenica-search.jsp"%>
 

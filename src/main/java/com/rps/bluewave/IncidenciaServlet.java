@@ -7,7 +7,6 @@ import com.ruben.bluewave.dao.criteria.IncidenciaCriteria;
 import com.ruben.bluewave.model.IncidenciaDTO;
 import com.ruben.bluewave.model.Results;
 import com.ruben.bluewave.service.IncidenciaService;
-import com.ruben.bluewave.service.ServiceException;
 import com.ruben.bluewave.service.impl.IncidenciaServiceImpl;
 
 import jakarta.servlet.ServletException;
@@ -19,7 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class HelloWorldServlet
  */
-@WebServlet("/evento-musical")
+@WebServlet("/incidencia")
 public class IncidenciaServlet extends HttpServlet {
 
 	private IncidenciaService incidenciaService = null;
@@ -43,12 +42,12 @@ public class IncidenciaServlet extends HttpServlet {
 
 			// Action: Ver el detalle de una incidencia
 			String idStr = request.getParameter("id");
-			// EventoMusicalCriteria criteria = new EventoMusicalCriteria();
-			// criteria.setId(Long.valueOf(idStr));
+			
+			
 			try {
-				IncidenciaDTO evento = incidenciaService.findById(Long.valueOf(idStr));
+				IncidenciaDTO incidencia = incidenciaService.findById(Long.valueOf(idStr));
 				// Redirige a la vista detalle
-				request.setAttribute("evento", evento);
+				request.setAttribute("evento", incidencia);
 				request.getRequestDispatcher(Views.INCIDENCIA_DETAIL).forward(request, response);
 
 			} catch (Exception e) {
@@ -78,7 +77,7 @@ public class IncidenciaServlet extends HttpServlet {
 				incidenciaService.delete(Long.valueOf(idStr));
 			} catch (Exception e) {
 				e.printStackTrace();
-				writer.append("<i>No ha podido borrarse el evento. Por favor contacte con su administrador</i>");
+				writer.append("<i>No ha podido borrarse la incidencia. Por favor contacte con su administrador</i>");
 			}
 		} else {
 			// Niguna action

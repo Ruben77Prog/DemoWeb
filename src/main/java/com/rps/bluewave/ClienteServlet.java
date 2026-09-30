@@ -69,14 +69,13 @@ public class ClienteServlet extends HttpServlet {
 			writer.append("Deberia redirigirte a pagina de error.");
 
 		}
-		System.out.println("=== DO GET ===");
-		System.out.println("Action recibida: " + action);
+		
 		writer.append("</html>");
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println("ESTOY EN DOPOST");
+	
 
 	    String action = request.getParameter("action");
 	    System.out.println("ACTION EN DOPOST: " + action);
