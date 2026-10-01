@@ -1,4 +1,3 @@
-
 package com.rps.bluewave;
 
 import java.io.IOException;
@@ -13,14 +12,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
-/**
- * Servlet implementation class ClienteServlet
- */
 @WebServlet("/Cliente")
 public class ClienteServlet extends HttpServlet {
 
-	ClienteService clienteService = null;
+	private ClienteService clienteService = null;
 
 	public ClienteServlet() {
 		super();
@@ -30,12 +27,8 @@ public class ClienteServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		PrintWriter writer = response.getWriter();
-
-		writer.append("<html>");
-
 		String action = request.getParameter("action");
-		
+
 		if ("login".equalsIgnoreCase(action)) {
 
 			String email = request.getParameter("email");
@@ -43,43 +36,59 @@ public class ClienteServlet extends HttpServlet {
 
 			try {
 
-				
 				Cliente cliente = new Cliente();
 				cliente.setEmail(email);
 				cliente.setContrasena(password);
 
-				
 				Cliente clienteEncontrado = clienteService.login(cliente);
 
 				if (clienteEncontrado != null) {
-					writer.append("Hola " + clienteEncontrado.getNombre() + "!");
+
+					// Guardamos el cliente en la sesión
+					HttpSession session = request.getSession();
+					session.setAttribute("usuario", clienteEncontrado);
+
+					// Redirigimos a la página de incidencias
+					response.sendRedirect(request.getContextPath() + "/incidencia?action=search");
+
 				} else {
-					writer.append("Email o contraseña incorrectos.");
+
+					// Login incorrecto
+					request.setAttribute("error", "Email o contraseña incorrectos.");
+
+					request.getRequestDispatcher(Views.CLIENTE_LOGIN).forward(request, response);
 				}
 
 			} catch (Exception e) {
 
 				e.printStackTrace();
-				writer.append("Se ha producido un error durante el login.");
 
+				request.setAttribute("error", "Se ha producido un error durante el login.");
+
+				request.getRequestDispatcher(Views.CLIENTE_LOGIN).forward(request, response);
 			}
+
+		} else if ("logout".equalsIgnoreCase(action)) {
+
+			// Recuperamos la sesión existente
+			HttpSession session = request.getSession(false);
+
+			if (session != null) {
+
+				session.invalidate();
+			}
+
+			response.sendRedirect(request.getContextPath() + Views.CLIENTE_LOGIN);
 
 		} else {
 
-			writer.append("Deberia redirigirte a pagina de error.");
-
+			response.sendRedirect(request.getContextPath() + Views.CLIENTE_LOGIN);
 		}
-		
-		writer.append("</html>");
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-	
 
-	    String action = request.getParameter("action");
-	    System.out.println("ACTION EN DOPOST: " + action);
 		doGet(request, response);
 	}
 }
-
