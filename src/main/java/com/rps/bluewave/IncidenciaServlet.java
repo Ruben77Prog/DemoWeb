@@ -47,7 +47,7 @@ public class IncidenciaServlet extends HttpServlet {
 			try {
 				IncidenciaDTO incidencia = incidenciaService.findById(Long.valueOf(idStr));
 				// Redirige a la vista detalle
-				request.setAttribute("evento", incidencia);
+				request.setAttribute("incidencia", incidencia);
 				request.getRequestDispatcher(Views.INCIDENCIA_DETAIL).forward(request, response);
 
 			} catch (Exception e) {
@@ -55,7 +55,7 @@ public class IncidenciaServlet extends HttpServlet {
 			}
 		} else if ("search".equalsIgnoreCase(action)) {
 
-			// Action: Buscar eventos
+			// Action: Buscar incidencia
 			String nombre = request.getParameter("nombre");
 			String fechaInicio = request.getParameter("fechaInicio");
 
@@ -81,6 +81,8 @@ public class IncidenciaServlet extends HttpServlet {
 			}
 		} else {
 			// Niguna action
+			
+			
 		}
 		writer.append("</html>");
 
