@@ -3,6 +3,7 @@ package com.rps.bluewave;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import com.bluewave.view.Views;
 import com.ruben.bluewave.dao.criteria.IncidenciaCriteria;
 import com.ruben.bluewave.model.Cliente;
 import com.ruben.bluewave.model.IncidenciaDTO;
@@ -31,16 +32,12 @@ public class IncidenciaServlet extends HttpServlet {
 
 		PrintWriter writer = response.getWriter();
 
-
-		Cliente cliente =
-				(Cliente) request.getSession().getAttribute("usuario");
+		Cliente cliente = (Cliente) request.getSession().getAttribute("usuario");
 
 		if (cliente == null) {
 
 			// No hay usuario logueado
-			response.sendRedirect(
-					request.getContextPath() + Views.CLIENTE_LOGIN
-			);
+			response.sendRedirect(request.getContextPath() + Views.CLIENTE_LOGIN);
 
 			return;
 		}
@@ -55,16 +52,11 @@ public class IncidenciaServlet extends HttpServlet {
 
 			try {
 
-				IncidenciaDTO incidencia =
-						incidenciaService.findById(
-								Long.valueOf(idStr)
-						);
+				IncidenciaDTO incidencia = incidenciaService.findById(Long.valueOf(idStr));
 
 				request.setAttribute("incidencia", incidencia);
 
-				request.getRequestDispatcher(
-						Views.INCIDENCIA_DETAIL
-				).forward(request, response);
+				request.getRequestDispatcher(Views.INCIDENCIA_DETAIL).forward(request, response);
 
 			} catch (Exception e) {
 
@@ -78,33 +70,23 @@ public class IncidenciaServlet extends HttpServlet {
 
 			String nombre = request.getParameter("nombre");
 
-			IncidenciaCriteria criteria =
-					new IncidenciaCriteria();
+			IncidenciaCriteria criteria = new IncidenciaCriteria();
 
 			criteria.setClienteNombre(nombre);
 
 			try {
 
-				Results<IncidenciaDTO> results =
-						incidenciaService.findByCriteria(
-								criteria,
-								1,
-								Integer.MAX_VALUE
-						);
+				Results<IncidenciaDTO> results = incidenciaService.findByCriteria(criteria, 1, Integer.MAX_VALUE);
 
 				request.setAttribute("results", results);
 
-				request.getRequestDispatcher(
-						Views.INCIDENCIA_SEARCH
-				).forward(request, response);
+				request.getRequestDispatcher(Views.INCIDENCIA_SEARCH).forward(request, response);
 
 			} catch (Exception e) {
 
 				e.printStackTrace();
 
-				writer.append(
-						"<p>No se han podido obtener las incidencias.</p>"
-				);
+				writer.append("<p>No se han podido obtener las incidencias.</p>");
 			}
 
 		} else if ("delete".equalsIgnoreCase(action)) {
@@ -115,38 +97,27 @@ public class IncidenciaServlet extends HttpServlet {
 
 			try {
 
-				incidenciaService.delete(
-						Long.valueOf(idStr)
-				);
+				incidenciaService.delete(Long.valueOf(idStr));
 
 				// Volvemos a la búsqueda
-				response.sendRedirect(
-						request.getContextPath()
-								+ "/incidencia?action=search"
-				);
+				response.sendRedirect(request.getContextPath() + "/incidencia?action=search");
 
 			} catch (Exception e) {
 
 				e.printStackTrace();
 
 				writer.append(
-						"<i>No ha podido borrarse la incidencia. "
-						+ "Por favor contacte con su administrador</i>"
-				);
+						"<i>No ha podido borrarse la incidencia. " + "Por favor contacte con su administrador</i>");
 			}
 
 		} else {
 
 			// Si no hay action, mostramos la búsqueda
-			response.sendRedirect(
-					request.getContextPath()
-							+ "/incidencia?action=search"
-			);
+			response.sendRedirect(request.getContextPath() + "/incidencia?action=search");
 		}
 	}
 
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response)
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		doGet(request, response);

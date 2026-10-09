@@ -1,4 +1,4 @@
-package com.rps.bluewave;
+package com.bluewave.view;
 
 public class Views {
 

@@ -3,6 +3,10 @@ package com.rps.bluewave;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import com.bluewave.view.Views;
+import com.ps.bluewave.util.AttributeName;
+import com.ps.bluewave.util.PNames;
+import com.ps.bluewave.util.PValues;
 import com.ruben.bluewave.model.Cliente;
 import com.ruben.bluewave.service.ClienteService;
 import com.ruben.bluewave.service.impl.ClienteServiceImpl;
@@ -27,12 +31,12 @@ public class ClienteServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		String action = request.getParameter("action");
+		String action = request.getParameter(PNames.ACTION);
 
 		if ("login".equalsIgnoreCase(action)) {
 
-			String email = request.getParameter("email");
-			String password = request.getParameter("password");
+			String email = request.getParameter(AttributeName.EMAIL);
+			String password = request.getParameter(AttributeName.PASSWORD);
 
 			try {
 
@@ -45,6 +49,7 @@ public class ClienteServlet extends HttpServlet {
 				if (clienteEncontrado != null) {
 
 					// Guardamos el cliente en la sesión
+
 					HttpSession session = request.getSession();
 					session.setAttribute("usuario", clienteEncontrado);
 
